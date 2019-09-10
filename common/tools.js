@@ -68,24 +68,7 @@ function observer(obj, options) {
 		}
 	})
 }
-export function getStoragePath(obj, key) {
-	let storagePath = [key]
-	while (obj) {
-		if (obj[Symbol.for('key')]) {
-			key = obj[Symbol.for('key')]
-			storagePath.unshift(key)
-		}
-		obj = obj[Symbol.for('parent')]
-	}
-	return storagePath
-}
-export function persistedState({state, setItem,	getItem, setDelay=0, getDelay=0}) {
-	observer(state, {
-		set: debounceStorage(state, setItem, setDelay),
-		get: debounceStorage(state, getItem, getDelay)
-	})
-}
-export function debounceStorage(state, fn, delay) {
+function debounceStorage(state, fn, delay) {
 	if(getType(fn) !== 'function') return null
 	let updateItems = new Set()
 	let timer = null
@@ -104,6 +87,23 @@ export function debounceStorage(state, fn, delay) {
 			}
 		}, delay)
 	}
+}
+export function getStoragePath(obj, key) {
+	let storagePath = [key]
+	while (obj) {
+		if (obj[Symbol.for('key')]) {
+			key = obj[Symbol.for('key')]
+			storagePath.unshift(key)
+		}
+		obj = obj[Symbol.for('parent')]
+	}
+	return storagePath
+}
+export function persistedState({state, setItem,	getItem, setDelay=0, getDelay=0}) {
+	observer(state, {
+		set: debounceStorage(state, setItem, setDelay),
+		get: debounceStorage(state, getItem, getDelay)
+	})
 }
 /*
  vuex自动配置mutation相关方法
