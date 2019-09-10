@@ -13,4 +13,4 @@
   state分replace和update两种，stateReplace自动生成[update+名字]的mutation方法，可通过方法直接替换对应项的值
   stateUpdate对应的mutations写在mutationsUpdate中，mutationsUpdate中的方法不是直接替换值的方法
   
-### 可点击login页面中的登录按钮观察storage变化
+### 可点击login页面中的登录按钮,可在调试窗口观察storage变化
