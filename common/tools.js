@@ -53,18 +53,8 @@ function dep(obj, key, options) {
 		}
 	})
 }
-export function getStoragePath(obj, key) {
-	let storagePath = [key]
-	while (obj) {
-		if (obj[Symbol.for('key')]) {
-			key = obj[Symbol.for('key')]
-			storagePath.unshift(key)
-		}
-		obj = obj[Symbol.for('parent')]
-	}
-	return storagePath
-}
-export function observer(obj, options) {
+
+function observer(obj, options) {
 	if (getType(obj) !== 'object') throw ('参数需为object')
 	let index
 	Object.keys(obj).forEach(key => {
@@ -77,6 +67,41 @@ export function observer(obj, options) {
 			observer(obj[key], options)
 		}
 	})
+}
+export function getStoragePath(obj, key) {
+	let storagePath = [key]
+	while (obj) {
+		if (obj[Symbol.for('key')]) {
+			key = obj[Symbol.for('key')]
+			storagePath.unshift(key)
+		}
+		obj = obj[Symbol.for('parent')]
+	}
+	return storagePath
+}
+export function persistedState({state, setItem,	getItem, setDelay, getDelay}) {
+	observer(state, {
+		set: debounceStorage(state, uni.setStorageSync, setDelay || 0)
+	})
+}
+export function debounceStorage(state, fn, delay) {
+	let updateItems = new Set()
+	let timer = null
+	return function setToStorage(obj, key) {
+		let changeKey = getStoragePath(obj, key)[0]
+		updateItems.add(changeKey)
+		clearTimeout(timer)
+		timer = setTimeout(() => {
+			try {
+				updateItems.forEach(key => {
+					fn.call(this, key, state[key])
+				})
+				updateItems.clear()
+			} catch (e) {
+				console.error(`persistent.js中state内容持久化失败,错误位于[${changeKey}]参数中的[${key}]项`)
+			}
+		}, delay)
+	}
 }
 /*
  vuex自动配置mutation相关方法
