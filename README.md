@@ -4,7 +4,7 @@
 
 ### 实现了vuex部分内容的持久化存储
 
-  需要持久化的文件放在store/persistent.js中，持久化的实现在common/tools.js中，在vuex中，持久化的项定义为一个名为storage的项
+  需要持久化的文件放在store/persistent.js中，持久化的实现在common/tools.js中，在vuex中，持久化的部分被定义为一个名为storage的模块
 
   当persistent.js中state里的相关项改变时，storage中的内容也会更新
   支持数组通过push、pop、shift等方法改变持久化的值
@@ -12,3 +12,5 @@
 
   state分replace和update两种，stateReplace自动生成[update+名字]的mutation方法，可通过方法直接替换对应项的值
   stateUpdate对应的mutations写在mutationsUpdate中，mutationsUpdate中的方法不是直接替换值的方法
+  
+### 可点击login页面中的登录按钮观察storage变化
