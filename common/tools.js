@@ -79,12 +79,14 @@ export function getStoragePath(obj, key) {
 	}
 	return storagePath
 }
-export function persistedState({state, setItem,	getItem, setDelay, getDelay}) {
+export function persistedState({state, setItem,	getItem, setDelay=0, getDelay=0}) {
 	observer(state, {
-		set: debounceStorage(state, uni.setStorageSync, setDelay || 0)
+		set: debounceStorage(state, setItem, setDelay),
+		get: debounceStorage(state, getItem, getDelay)
 	})
 }
 export function debounceStorage(state, fn, delay) {
+	if(getType(fn) !== 'function') return null
 	let updateItems = new Set()
 	let timer = null
 	return function setToStorage(obj, key) {
