@@ -10,4 +10,5 @@
 支持数组通过push、pop、shift等方法改变持久化的值
 persistent.js中做了对更新storage的防抖操作
 
-state分replace和update两种，stateReplace自动生成[update+名字]的mutation方法
+state分replace和update两种，stateReplace自动生成[update+名字]的mutation方法，可通过方法直接替换对应项的值
+stateUpdate对应的mutations写在mutationsUpdate中，mutationsUpdate中的方法不是直接替换值的方法
