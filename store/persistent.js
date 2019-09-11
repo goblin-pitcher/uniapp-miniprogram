@@ -21,12 +21,8 @@ setMutations(stateReplace, mutationsReplace)
 const mutationsUpdate = {
 
 }
-const state = { ...stateReplace,
-	...stateUpdate
-}
-const mutations = { ...mutationsReplace,
-	...mutationsUpdate
-}
+const state = {...stateReplace, ...stateUpdate}
+const mutations = {...mutationsReplace, ...mutationsUpdate}
 export default {
 	namespaced: true,
 	state,
