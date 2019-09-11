@@ -68,6 +68,17 @@ function observer(obj, options) {
 		}
 	})
 }
+function getStoragePath(obj, key) {
+	let storagePath = [key]
+	while (obj) {
+		if (obj[Symbol.for('key')]) {
+			key = obj[Symbol.for('key')]
+			storagePath.unshift(key)
+		}
+		obj = obj[Symbol.for('parent')]
+	}
+	return storagePath
+}
 function debounceStorage(state, fn, delay) {
 	if(getType(fn) !== 'function') return null
 	let updateItems = new Set()
@@ -87,17 +98,6 @@ function debounceStorage(state, fn, delay) {
 			}
 		}, delay)
 	}
-}
-export function getStoragePath(obj, key) {
-	let storagePath = [key]
-	while (obj) {
-		if (obj[Symbol.for('key')]) {
-			key = obj[Symbol.for('key')]
-			storagePath.unshift(key)
-		}
-		obj = obj[Symbol.for('parent')]
-	}
-	return storagePath
 }
 export function persistedState({state, setItem,	getItem, setDelay=0, getDelay=0}) {
 	observer(state, {
