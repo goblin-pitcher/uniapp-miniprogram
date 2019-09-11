@@ -16,7 +16,7 @@ function rewriteArrFunc(arr, options) {
 	if (getType(arr) !== 'array') throw ('参数需为array')
 	funcArr.forEach(key => {
 		arr[key] = function(...args) {
-			this.__proto__[key].call(this, ...args)
+			this.__proto__[key].apply(this, args)
 			setCallBack(this[Symbol.for('parent')], this[Symbol.for('key')], options)
 		}
 	})
