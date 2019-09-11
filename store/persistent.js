@@ -1,7 +1,5 @@
 import {
 	persistedState,
-	getType,
-	getStoragePath,
 	setMutations
 } from '../common/tools.js'
 
