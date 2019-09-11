@@ -41,7 +41,10 @@
 			};
 		},
 		computed: {
-			...mapState('storage', ['password'])
+			...mapState('storage', ['loginID', 'password'])
+		},
+		onLoad() {
+			this.account = this.loginID
 		},
 		methods: {
 			...mapMutations('storage', ['updateLoginID', 'updatePassword']),
@@ -75,5 +78,5 @@
 	}
 </script>
 
-<style>
+<style lang="less">
 </style>
