@@ -93,16 +93,28 @@ function debounceStorage(state, fn, delay) {
 					fn.call(this, key, state[key])
 				})
 				updateItems.clear()
-			} catch (e) {
+			} catch(e) {
 				console.error(`persistent.js中state内容持久化失败,错误位于[${changeKey}]参数中的[${key}]项`)
 			}
 		}, delay)
 	}
 }
-export function persistedState({state, setItem,	getItem, setDelay=0, getDelay=0}) {
+export function persistedState({state, setItem,	getItem, setDelay=0}) {
+	if(getType(getItem) === 'function') {
+		// 初始化时将storage中的内容填充到state
+		try{
+			Object.keys(state).forEach(key => {
+				if(state[key] !== undefined) 
+					state[key] = getItem(key)
+			})
+		} catch(e) {
+			console.error('初始化过程中获取持久化参数失败')
+		}
+	} else {
+		console.warn('getItem不是一个function,初始化时获取持久化内容的功能不可用')
+	}
 	observer(state, {
-		set: debounceStorage(state, setItem, setDelay),
-		get: debounceStorage(state, getItem, getDelay)
+		set: debounceStorage(state, setItem, setDelay)
 	})
 }
 /*
