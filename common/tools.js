@@ -34,9 +34,6 @@ function dep(obj, key, options) {
 	Object.defineProperty(obj, key, {
 		configurable: true,
 		get() {
-			if (options && options.get) {
-				options.get(obj, key)
-			}
 			return data
 		},
 		set(val) {
